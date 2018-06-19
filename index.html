@@ -1,0 +1,127 @@
+
+<html>
+<head>
+	<title>Code Player</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script src="jquery-ui/jquery-ui.js"></script>	
+	<link rel="stylesheet" href="jquery-ui/jquery-ui.css" >
+	<style type="text/css">
+		body{
+			font-family: Helvetica,sans-serif;
+			padding: 0;
+			margin:0;
+		}
+		#title-bar{
+			background-color: #F5F5F5;
+			padding: 8px;
+			height: 30px;			
+		}
+		#heading{
+			font-weight: bold;
+			font-size: 25px;
+			margin : 0;
+			padding: 0;
+			width: 147px;
+			height: 30px;
+			float : left;			
+			border-top-left-radius:5px;
+		}
+		#button-menu{			
+			width: 302px;
+			margin:auto;		
+			padding: 0;
+			
+		}
+		.buttons{
+			float: left;
+			font-size: 20px;
+			border-width:  1px 0 1px 1px;
+			margin:0;
+			border-color: black;
+			
+		}
+		
+		#html{
+			border-radius:5px 0 0 5px;
+		}
+		#output{
+			border-radius:0 5px 5px 0;
+			border-right-width: 1px;
+		}
+		#rest-body{			
+			height: 94%;			
+		}
+		textarea{
+			border-width: 1px;
+			height: 100%;					
+			resize: none;
+		}
+		.panel{
+			float: left;
+			width: 50%;			
+			border-left: none !important;
+			height: 100%;
+		}
+		#output-body{
+			border:none;		
+			margin:0;	
+		}
+		.active{
+			background-color: pink;
+		}
+		
+		.highlight{
+			background-color: #FFDF00;
+		}		
+		.hidden{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="title-bar">
+		
+			<p id="heading">Code Player</p>
+			<div id="button-menu">
+				<button class="buttons active" id="html">HTML</button>
+				<button class="buttons" id="css">CSS</button>
+				<button class="buttons" id="javascript">JavaScript</button>
+				<button class="buttons active" class="active" id="output">Output</button>			
+			</div>
+	</div>
+	<div id="rest-body">
+		<textarea class="panel" id="html-body"></textarea>
+		<textarea class="panel hidden" id="css-body"></textarea>
+		<textarea class="panel hidden" id="javascript-body"></textarea>
+		<iframe class="panel" id="output-body"></iframe>
+	</div>
+	<script type="text/javascript">
+		$("#output-body").css("height",$("#rest-body").height());
+		$(".buttons").hover(
+			function(){
+	        $(this).addClass("highlight");
+	        },
+	        function(){
+	        $(this).removeClass("highlight");
+	    });	
+	    show();
+		$(".buttons").click(function(){
+			$(this).toggleClass("active");
+			$(this).removeClass("highlight");			
+			var id = "#"+$(this).attr("id") + "-body";			
+			$(id).toggleClass("hidden");			
+			show();
+		});
+		$("textarea").on('keyup change paste',function(){
+			
+			show();
+		});
+		function show(){
+			var frames = $(".active").length;
+	    	$(".panel").width($("#rest-body").width()/frames-0.745*frames);
+			$("#output-body").contents().find("html").html("<html><head><style type='text/css'>"+$("#css-body").val()+"</style></head><body>"+$("#html-body").val()+$("#javascript-body").val()+"</body></html>");
+			document.getElementById("output-body").contentWindow.eval($("#javascript-body").val());
+		}
+	</script>
+</body>
+</html>
